@@ -1,0 +1,20 @@
+{
+	admin off
+	auto_https disable_redirects
+	http_port 1314
+}
+
+http://localhost:1314 {
+	file_server
+	root www
+
+	# --- Method 5
+	@post {
+		file /blog/{path} /blog/{path}/
+		not file {path} {path}/
+		path_regexp post ^/([^/]+)/?$
+	}
+	# remove trailing /, let caddy/browser handle that
+	redir @post /blog/{re.post.1}
+
+}
